@@ -1,7 +1,8 @@
 #LoggedFS - Filesystem monitoring with Fuse
 ##Description
 
-LoggedFS is a fuse-based filesystem which can log every operations that happens in it. Sourceforge page
+LoggedFS is a fuse-based filesystem which can log every operations that happens in it. 
+
 How does it work ?
 
 Fuse does almost everything. LoggedFS only sends a message to syslog when called by fuse and then let the real filesystem do the rest of the job.
@@ -14,7 +15,7 @@ If loggedfs is included in your distribution you can just install with your pack
 
 
 First you have to make sure that fuse is installed on your computer. 
-If you have a recent distribution it should be. Fuse can be downloaded here : http://fuse.sourceforge.net.
+If you have a recent distribution it should be. Fuse can be downloaded here : https://github.com/libfuse/libfuse.
 Then you should download the loggedfs archive and install it with the make command :
 
     tar xfj loggedfs-X.Y.tar.bz2
