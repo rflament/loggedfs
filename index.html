@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Loggedfs by rflament</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Loggedfs</h1>
+      <h2 class="project-tagline">LoggedFS - Filesystem monitoring with Fuse</h2>
+      <a href="https://github.com/rflament/loggedfs" class="btn">View on GitHub</a>
+      <a href="https://github.com/rflament/loggedfs/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/rflament/loggedfs/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="loggedfs---filesystem-monitoring-with-fuse" class="anchor" href="#loggedfs---filesystem-monitoring-with-fuse" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>LoggedFS - Filesystem monitoring with Fuse</h1>
+
+<h2>
+<a id="description" class="anchor" href="#description" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Description</h2>
+
+<p>LoggedFS is a fuse-based filesystem which can log every operations that happens in it. </p>
+
+<p>How does it work ?</p>
+
+<p>Fuse does almost everything. LoggedFS only sends a message to syslog when called by fuse and then let the real filesystem do the rest of the job.</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>If loggedfs is included in your distribution you can just install with your package manager.</p>
+
+<h2>
+<a id="installation-from-source" class="anchor" href="#installation-from-source" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation from source</h2>
+
+<p>First you have to make sure that fuse is installed on your computer. 
+If you have a recent distribution it should be. Fuse can be downloaded here : <a href="https://github.com/libfuse/libfuse">https://github.com/libfuse/libfuse</a>.
+Then you should download the loggedfs archive and install it with the make command :</p>
+
+<pre><code>tar xfj loggedfs-X.Y.tar.bz2
+cd loggedfs-X.Y
+make
+make install
+</code></pre>
+
+<p>LoggedFS has the following dependencies :</p>
+
+<pre><code>fuse
+rlog
+pcre
+libxml2
+</code></pre>
+
+<h2>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuration</h2>
+
+<p>LoggedFS can use an XML configuration file if you want it to log operations only for certain files, for certain users, or for certain operations.</p>
+
+<p>Here is a sample configuration file :</p>
+
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+&lt;loggedFS logEnabled="true" printProcessName="true"&gt;
+  &lt;includes&gt;
+    &lt;include extension=".*" uid="*" action=".*" retname=".*"/&gt;
+  &lt;/includes&gt;
+  &lt;excludes&gt;
+    &lt;exclude extension=".*\.bak$" uid="*" action=".*" retname="SUCCESS"/&gt;
+    &lt;exclude extension=".*" uid="1000" action=".*" retname="FAILURE"/&gt;
+    &lt;exclude extension=".*" uid="*" action="getattr" retname=".*"/&gt;
+  &lt;/excludes&gt;
+&lt;/loggedFS&gt;
+</code></pre>
+
+<p>This configuration can be used to log everything except it if concerns a *.bak file, or if the uid is 1000, or if the operation is getattr.</p>
+
+<h2>
+<a id="launching-loggedfs" class="anchor" href="#launching-loggedfs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Launching LoggedFS</h2>
+
+<p>If you just want to test LoggedFS you don't need any configuration file.</p>
+
+<p>Just use that command :</p>
+
+<pre><code>loggedfs -f -p /var
+</code></pre>
+
+<p>You should see logs like these :</p>
+
+<pre><code>tail -f /var/log/syslog
+17:29:34 (src/loggedfs.cpp:552) LoggedFS running as a public filesystem
+17:29:34 (src/loggedfs.cpp:547) LoggedFS not running as a daemon
+17:29:34 (src/loggedfs.cpp:666) LoggedFS starting at /var.
+17:29:34 (src/loggedfs.cpp:691) chdir to /var
+17:29:35 (src/loggedfs.cpp:136) getattr /var/ {SUCCESS} [ pid = 8700 kded [kdeinit] uid = 1000 ]
+17:29:41 (src/loggedfs.cpp:136) getattr /var/ {SUCCESS} [ pid = 10923 ls uid = 1000 ]
+17:29:41 (src/loggedfs.cpp:136) getattr /var/run {SUCCESS} [ pid = 10923 ls uid = 1000 ]
+17:29:41 (src/loggedfs.cpp:136) getattr /var/run/nscd {FAILURE} [ pid = 10923 ls uid = 1000 ]
+17:29:41 (src/loggedfs.cpp:136) readdir /var/ {SUCCESS} [ pid = 10923 ls uid = 1000 ]
+17:29:41 (src/loggedfs.cpp:136) getattr /var/pouak {SUCCESS} [ pid = 10923 ls uid = 1000 ]
+</code></pre>
+
+<p>If you have a configuration file to use you should use this command :</p>
+
+<pre><code>./loggedfs -c loggedfs.xml -p /var
+</code></pre>
+
+<p>If you want to log what other users do on your filesystem, you should use the -p option to allow them to see your mounted files. For a complete documentation see the manual page</p>
+
+<p>Rémi Flament - remipouak at gmail.com</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/rflament/loggedfs">Loggedfs</a> is maintained by <a href="https://github.com/rflament">rflament</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
