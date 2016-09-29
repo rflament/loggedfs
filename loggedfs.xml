@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is a sample configuration file for loggedfs. -->
+<!-- This file is not used by default, you need to use the -c option to use it. -->
+<loggedFS logEnabled="true" printProcessName="true">
+	<includes>
+		<include extension=".*" uid="*" action=".*" retname=".*"/>
+	</includes>
+	<excludes>
+		<!-- Do not log getattr operations -->
+		<exclude extension=".*" uid="*" action="getattr" retname=".*"/>
+	</excludes>
+</loggedFS>

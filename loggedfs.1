@@ -1,0 +1,36 @@
+.TH LoggedFS 1 "JANUARY 2007" "User Manuals"
+.SH NAME
+LoggedFS \- Filesystem monitoring with Fuse
+.SH SYNOPSIS
+.B loggedfs [-fp] [-c
+.I config-file
+.B ] [-l
+.I log-file
+.B ]
+.I directory
+.B ...
+.SH DESCRIPTION
+.B LoggedFS 
+is a transparent fuse-filesystem which allows to log every operations that happens in the backend filesystem. Logs can be written to syslog, to a file, or to the standard output. LoggedFS comes with a XML configuration file in which you can choose exactly what you want to log and what you don't want to log. You can add filters on users, operations (open, read, write, chown, chmod, etc.), filenames , and return code. Filename's filters are regular expressions.
+.SH OPTIONS
+.IP -f
+Do not start as a daemon. Write logs to stdout if no log file is specified.
+.IP "-c config-file"
+Use the
+.I config-file
+to filter what you want to log.
+.IP "-l log-file"
+Use the
+.I log-file
+to write logs to. If no log file is specified then logs are only written to syslog or to stdout, depending on -f.
+.IP -p
+Allow every users to see the new loggedfs. 
+.SH FILES
+.I /etc/fuse.conf
+.RS
+The system wide configuration file.
+.RE
+.SH AUTHOR
+Remi Flament <rflament@laposte.net>
+.SH "SEE ALSO"
+.BR fusermount (1)
