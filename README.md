@@ -18,6 +18,7 @@ First you have to make sure that fuse is installed on your computer.
 If you have a recent distribution it should be. Fuse can be downloaded here : https://github.com/libfuse/libfuse.
 Then you should download the loggedfs archive and install it with the make command :
 
+    sudo apt-get install librlog-dev libfuse-dev libxml2-dev libpcre3-dev
     tar xfj loggedfs-X.Y.tar.bz2
     cd loggedfs-X.Y
     make
