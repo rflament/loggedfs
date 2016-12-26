@@ -126,7 +126,7 @@ static char* getcallername()
 
 static void loggedfs_log(const char* path,const char* action,const int returncode,const char *format,...)
 {
-    char *retname;
+    const char* retname;
     if (returncode >= 0)
         retname = "SUCCESS";
     else
