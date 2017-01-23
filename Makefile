@@ -24,7 +24,7 @@ clean:
 	rm -rf $(builddir)/
 	
 install:
-	gzip loggedfs.1
+	gzip --keep loggedfs.1
 	cp loggedfs.1.gz /usr/share/man/man1/
 	cp loggedfs /usr/bin/
 	cp loggedfs.xml /etc/
