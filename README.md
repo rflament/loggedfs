@@ -1,5 +1,5 @@
-#LoggedFS - Filesystem monitoring with Fuse
-##Description
+# LoggedFS - Filesystem monitoring with Fuse
+## Description
 
 LoggedFS is a fuse-based filesystem which can log every operations that happens in it. 
 
@@ -7,11 +7,11 @@ How does it work ?
 
 Fuse does almost everything. LoggedFS only sends a message to syslog when called by fuse and then let the real filesystem do the rest of the job.
 
-##Installation
+## Installation
 
 If loggedfs is included in your distribution you can just install with your package manager.
 
-##Installation from source
+## Installation from source
 
 
 First you have to make sure that fuse is installed on your computer. 
@@ -31,7 +31,7 @@ LoggedFS has the following dependencies :
     pcre
     libxml2
 
-##Configuration
+## Configuration
 
 LoggedFS can use an XML configuration file if you want it to log operations only for certain files, for certain users, or for certain operations.
 
@@ -52,7 +52,7 @@ Here is a sample configuration file :
 
 This configuration can be used to log everything except it if concerns a *.bak file, or if the uid is 1000, or if the operation is getattr.
 
-##Launching LoggedFS
+## Launching LoggedFS
 
 If you just want to test LoggedFS you don't need any configuration file.
  
