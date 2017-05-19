@@ -9,13 +9,14 @@ Fuse does almost everything. LoggedFS only sends a message to syslog when called
 
 ## Installation
 
-If loggedfs is included in your distribution you can just install with your package manager.
+If loggedfs is included in your distribution you can just install with your package manager :
+   sudo apt-get install loggedfs   
 
 ## Installation from source
 
-
 First you have to make sure that fuse is installed on your computer. 
 If you have a recent distribution it should be. Fuse can be downloaded here : https://github.com/libfuse/libfuse.
+
 Then you should download the loggedfs archive and install it with the make command :
 
     sudo apt-get install librlog-dev libfuse-dev libxml2-dev libpcre3-dev
