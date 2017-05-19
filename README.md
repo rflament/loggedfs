@@ -10,6 +10,7 @@ Fuse does almost everything. LoggedFS only sends a message to syslog when called
 ## Installation
 
 If loggedfs is included in your distribution you can just install with your package manager :
+
    sudo apt-get install loggedfs   
 
 ## Installation from source
