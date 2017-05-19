@@ -1,5 +1,5 @@
-#LoggedFS - Filesystem monitoring with Fuse
-##Description
+# LoggedFS - Filesystem monitoring with Fuse
+## Description
 
 LoggedFS is a fuse-based filesystem which can log every operations that happens in it. 
 
@@ -7,15 +7,31 @@ How does it work ?
 
 Fuse does almost everything. LoggedFS only sends a message to syslog when called by fuse and then let the real filesystem do the rest of the job.
 
-##Installation
+## Installation
 
-If loggedfs is included in your distribution you can just install with your package manager.
+If loggedfs is included in your distribution you can just install with your package manager :
 
-##Installation from source
+    sudo apt-get install loggedfs   
 
+## Simplest usage
+
+To record access to /tmp/TEST into ~/log.txt, just do:
+
+    loggedfs -l ~/log.txt /tmp/TEST 
+
+To stop recording, just unmount as usual:
+
+    sudo umount /tmp/TEST
+    
+~/log.txt will need to be changed to readable by setting permissions:
+    
+    chmod 0666 ~/log.txt
+    
+## Installation from source
 
 First you have to make sure that fuse is installed on your computer. 
 If you have a recent distribution it should be. Fuse can be downloaded here : https://github.com/libfuse/libfuse.
+
 Then you should download the loggedfs archive and install it with the make command :
 
     sudo apt-get install librlog-dev libfuse-dev libxml2-dev libpcre3-dev
@@ -31,7 +47,7 @@ LoggedFS has the following dependencies :
     pcre
     libxml2
 
-##Configuration
+## Configuration
 
 LoggedFS can use an XML configuration file if you want it to log operations only for certain files, for certain users, or for certain operations.
 
@@ -52,7 +68,7 @@ Here is a sample configuration file :
 
 This configuration can be used to log everything except it if concerns a *.bak file, or if the uid is 1000, or if the operation is getattr.
 
-##Launching LoggedFS
+## Launching LoggedFS
 
 If you just want to test LoggedFS you don't need any configuration file.
  
