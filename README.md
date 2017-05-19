@@ -11,8 +11,22 @@ Fuse does almost everything. LoggedFS only sends a message to syslog when called
 
 If loggedfs is included in your distribution you can just install with your package manager :
 
-   sudo apt-get install loggedfs   
+    sudo apt-get install loggedfs   
 
+## Simplest usage
+
+To record access to /tmp/TEST into ~/log.txt, just do:
+
+    loggedfs -l ~/log.txt /tmp/TEST 
+
+To stop recording, just unmount as usual:
+
+    sudo umount /tmp/TEST
+    
+~/log.txt will need to be changed to readable by setting permissions:
+    
+    chmod 0666 ~/log.txt
+    
 ## Installation from source
 
 First you have to make sure that fuse is installed on your computer. 
