@@ -115,13 +115,19 @@ static char* getRelativePath(const char* path)
  */
 static char* getcallername()
 {
-    char filename[100];
-    sprintf(filename,"/proc/%d/cmdline",fuse_get_context()->pid);
-    FILE * proc=fopen(filename,"rt");
-    char cmdline[256]="";
-    fread(cmdline,sizeof(cmdline),1,proc);
-    fclose(proc);
-    return strdup(cmdline);
+   char filename[100];
+   sprintf(filename,"/proc/%d/cmdline",fuse_get_context()->pid);
+   FILE * proc;
+   char cmdline[256]="";
+
+   if ((proc=fopen(filename,"rt")) == NULL)
+      return NULL;
+   else {
+      fread(cmdline,sizeof(cmdline),1,proc);
+      fclose(proc);
+   }
+
+   return strdup(cmdline);
 }
 
 static void loggedfs_log(const char* path,const char* action,const int returncode,const char *format,...)
@@ -139,11 +145,16 @@ static void loggedfs_log(const char* path,const char* action,const int returncod
         memset(buf,0,1024);
         vsprintf(buf,format,args);
         strcat(buf," {%s} [ pid = %d %s uid = %d ]");
-        if (returncode >= 0)
-		rLog(Info, buf,retname, fuse_get_context()->pid,config.isPrintProcessNameEnabled()?getcallername():"", fuse_get_context()->uid);
-	else
-		rError( buf,retname, fuse_get_context()->pid,config.isPrintProcessNameEnabled()?getcallername():"", fuse_get_context()->uid);
+        char * caller_name = getcallername();
+
+        if (returncode >= 0) {
+           rLog(Info, buf,retname, fuse_get_context()->pid,config.isPrintProcessNameEnabled()?caller_name:"", fuse_get_context()->uid);
+        }
+        else {
+           rError( buf,retname, fuse_get_context()->pid,config.isPrintProcessNameEnabled()?caller_name:"", fuse_get_context()->uid);
+        }
         va_end(args);
+        delete [] caller_name;
     }
 }
 
@@ -163,6 +174,8 @@ static int loggedFS_getattr(const char *path, struct stat *stbuf)
     path=getRelativePath(path);
     res = lstat(path, stbuf);
     loggedfs_log(aPath,"getattr",res,"getattr %s",aPath);
+    delete [] aPath;
+    delete [] path;
     if(res == -1)
         return -errno;
 
@@ -178,6 +191,8 @@ static int loggedFS_access(const char *path, int mask)
     path=getRelativePath(path);
     res = access(path, mask);
     loggedfs_log(aPath,"access",res,"access %s",aPath);
+    delete [] aPath;
+    delete [] path;
     if (res == -1)
         return -errno;
 
@@ -194,10 +209,13 @@ static int loggedFS_readlink(const char *path, char *buf, size_t size)
     path=getRelativePath(path);
     res = readlink(path, buf, size - 1);
     loggedfs_log(aPath,"readlink",res,"readlink %s",aPath);
+    delete [] aPath;
+    delete [] path;
     if(res == -1)
         return -errno;
 
     buf[res] = '\0';
+
     return 0;
 }
 
@@ -219,6 +237,8 @@ static int loggedFS_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
     if(dp == NULL) {
         res = -errno;
         loggedfs_log(aPath,"readdir",-1,"readdir %s",aPath);
+        delete [] aPath;
+        delete [] path;
         return res;
     }
 
@@ -233,6 +253,9 @@ static int loggedFS_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 
     closedir(dp);
     loggedfs_log(aPath,"readdir",0,"readdir %s",aPath);
+	 delete [] aPath;
+	 delete [] path;
+
     return 0;
 }
 
@@ -267,14 +290,18 @@ static int loggedFS_mknod(const char *path, mode_t mode, dev_t rdev)
 	else loggedfs_log(aPath,"mknod",res,"mknod %s %o",aPath, mode);
 	}
 
-	if (res == -1)
-	        return -errno;
-	else
-		{
-		lchown(path, fuse_get_context()->uid, fuse_get_context()->gid);
-		}
+   delete [] aPath;
 
-    return 0;
+   if (res == -1) {
+      delete [] path;
+      return -errno;
+   }
+   else
+      lchown(path, fuse_get_context()->uid, fuse_get_context()->gid);
+
+   delete [] path;
+
+   return 0;
 }
 
 static int loggedFS_mkdir(const char *path, mode_t mode)
@@ -284,11 +311,17 @@ static int loggedFS_mkdir(const char *path, mode_t mode)
     path=getRelativePath(path);
     res = mkdir(path, mode);
     loggedfs_log(getRelativePath(aPath),"mkdir",res,"mkdir %s %o",aPath, mode);
-    if(res == -1)
+	 delete [] aPath;
+
+    if(res == -1) {
+        delete [] path;
         return -errno;
+	 }
     else
         lchown(path, fuse_get_context()->uid, fuse_get_context()->gid);
-    return 0;
+
+   delete [] path;
+   return 0;
 }
 
 static int loggedFS_unlink(const char *path)
@@ -298,6 +331,9 @@ static int loggedFS_unlink(const char *path)
     path=getRelativePath(path);
     res = unlink(path);
     loggedfs_log(aPath,"unlink",res,"unlink %s",aPath);
+    delete [] aPath;
+    delete [] path;
+
     if(res == -1)
         return -errno;
 
@@ -311,9 +347,10 @@ static int loggedFS_rmdir(const char *path)
     path=getRelativePath(path);
     res = rmdir(path);
     loggedfs_log(aPath,"rmdir",res,"rmdir %s",aPath);
+    delete [] aPath;
+    delete [] path;
     if(res == -1)
         return -errno;
-
     return 0;
 }
 
@@ -327,11 +364,16 @@ static int loggedFS_symlink(const char *from, const char *to)
     res = symlink(from, to);
     
     loggedfs_log( aTo,"symlink",res,"symlink from %s to %s",aTo,from);
-    if(res == -1)
-        return -errno;
+    delete [] aTo;
+
+    if(res == -1) {
+       delete [] to;
+       return -errno;
+	}
     else
         lchown(to, fuse_get_context()->uid, fuse_get_context()->gid);
 
+    delete [] to;
     return 0;
 }
 
@@ -344,6 +386,11 @@ static int loggedFS_rename(const char *from, const char *to)
     to=getRelativePath(to);
     res = rename(from, to);
     loggedfs_log( aFrom,"rename",res,"rename %s to %s",aFrom,aTo);
+    delete [] aFrom;
+    delete [] aTo;
+    delete [] from;
+    delete [] to;
+
     if(res == -1)
         return -errno;
 
@@ -361,10 +408,18 @@ static int loggedFS_link(const char *from, const char *to)
     
     res = link(from, to);
     loggedfs_log( aTo,"link",res,"hard link from %s to %s",aTo,aFrom);
-    if(res == -1)
-        return -errno;
+    delete [] aFrom;
+    delete [] aTo;
+    delete [] from;
+
+    if(res == -1) {
+      delete [] to;
+      return -errno;
+	 }
     else
         lchown(to, fuse_get_context()->uid, fuse_get_context()->gid);
+
+    delete [] to;
 
     return 0;
 }
@@ -376,6 +431,9 @@ static int loggedFS_chmod(const char *path, mode_t mode)
     path=getRelativePath(path);
     res = chmod(path, mode);
     loggedfs_log(aPath,"chmod",res,"chmod %s to %o",aPath, mode);
+    delete [] aPath;
+    delete [] path;
+
     if(res == -1)
         return -errno;
 
@@ -412,6 +470,9 @@ static int loggedFS_chown(const char *path, uid_t uid, gid_t gid)
 	    loggedfs_log(aPath,"chown",res,"chown %s to %d:%d %s:%s",aPath, uid, gid, username, groupname);
     else
 	   loggedfs_log(aPath,"chown",res,"chown %s to %d:%d",aPath, uid, gid);
+    delete [] aPath;
+    delete [] path;
+
     if(res == -1)
         return -errno;
 
@@ -426,6 +487,9 @@ static int loggedFS_truncate(const char *path, off_t size)
     path=getRelativePath(path);
     res = truncate(path, size);
     loggedfs_log(aPath,"truncate",res,"truncate %s to %d bytes",aPath, size);
+    delete [] aPath;
+    delete [] path;
+
     if(res == -1)
         return -errno;
 
@@ -440,6 +504,9 @@ static int loggedFS_utime(const char *path, struct utimbuf *buf)
     path=getRelativePath(path);
     res = utime(path, buf);
     loggedfs_log(aPath,"utime",res,"utime %s",aPath);
+    delete [] aPath;
+    delete [] path;
+
     if(res == -1)
         return -errno;
 
@@ -465,6 +532,9 @@ static int loggedFS_utimens(const char *path, const struct timespec ts[2])
     res = utimes(path, tv);
     
     loggedfs_log(aPath,"utimens",res,"utimens %s",aPath);
+    delete [] aPath;
+    delete [] path;
+
     if (res == -1)
         return -errno;
 
@@ -491,8 +561,11 @@ static int loggedFS_open(const char *path, struct fuse_file_info *fi)
 		loggedfs_log(aPath,"open-readwrite",res,"open readwrite %s",aPath);
 	}
 	else  loggedfs_log(aPath,"open",res,"open %s",aPath);
-   
-    if(res == -1)
+
+   delete [] aPath;
+   delete [] path;
+
+   if(res == -1)
         return -errno;
 
     close(res);
@@ -513,6 +586,8 @@ static int loggedFS_read(const char *path, char *buf, size_t size, off_t offset,
     if(fd == -1) {
         res = -errno;
         loggedfs_log(aPath,"read",-1,"read %d bytes from %s at offset %d",size,aPath,offset);
+        delete [] aPath;
+        delete [] path;
         return res;
     } else {
         loggedfs_log(aPath,"read",0,"read %d bytes from %s at offset %d",size,aPath,offset);
@@ -523,6 +598,9 @@ static int loggedFS_read(const char *path, char *buf, size_t size, off_t offset,
     if(res == -1)
         res = -errno;
     else loggedfs_log(aPath,"read",0, "%d bytes read from %s at offset %d",res,aPath,offset);
+
+    delete [] aPath;
+    delete [] path;
 
     close(fd);
     return res;
@@ -541,6 +619,8 @@ static int loggedFS_write(const char *path, const char *buf, size_t size,
     if(fd == -1) {
         res = -errno;
         loggedfs_log(aPath,"write",-1,"write %d bytes to %s at offset %d",size,aPath,offset);
+        delete [] aPath;
+        delete [] path;
         return res;
     } else {
         loggedfs_log(aPath,"write",0,"write %d bytes to %s at offset %d",size,aPath,offset);
@@ -553,6 +633,9 @@ static int loggedFS_write(const char *path, const char *buf, size_t size,
     else loggedfs_log(aPath,"write",0, "%d bytes written to %s at offset %d",res,aPath,offset);
 
     close(fd);
+    delete [] aPath;
+    delete [] path;
+
     return res;
 }
 
@@ -563,6 +646,8 @@ static int loggedFS_statfs(const char *path, struct statvfs *stbuf)
     path=getRelativePath(path);
     res = statvfs(path, stbuf);
     loggedfs_log(aPath,"statfs",res,"statfs %s",aPath);
+    delete [] aPath;
+    delete [] path;
     if(res == -1)
         return -errno;
 
