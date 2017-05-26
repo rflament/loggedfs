@@ -67,6 +67,7 @@ bool Filter::matches( const char* str,const char* pattern)
                  ovector,              /* output vector for substring information */
                  OVECCOUNT);           /* number of elements in the output vector */
 
+    pcre_free(re);
     return (rc >= 0);
 }
 
