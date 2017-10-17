@@ -667,12 +667,14 @@ static int loggedFS_release(const char *path, struct fuse_file_info *fi)
 static int loggedFS_fsync(const char *path, int isdatasync,
                           struct fuse_file_info *fi)
 {
-    /* Just a stub.  This method is optional and can safely be left
-       unimplemented */
-
-    (void) path;
-    (void) isdatasync;
+    char *aPath=getAbsolutePath(path);
+    path=getRelativePath(path);
     (void) fi;
+
+    loggedfs_log(aPath,"release",0,"release %s",aPath);
+    delete [] aPath;
+    delete [] path;
+
     return 0;
 }
 
