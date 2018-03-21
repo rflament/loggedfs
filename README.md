@@ -34,7 +34,7 @@ If you have a recent distribution it should be. Fuse can be downloaded here : ht
 
 Then you should download the loggedfs archive and install it with the make command :
 
-    sudo apt-get install librlog-dev libfuse-dev libxml2-dev libpcre3-dev
+    sudo apt-get install libfuse-dev libxml2-dev libpcre3-dev
     tar xfj loggedfs-X.Y.tar.bz2
     cd loggedfs-X.Y
     make
@@ -43,7 +43,6 @@ Then you should download the loggedfs archive and install it with the make comma
 LoggedFS has the following dependencies :
 
     fuse
-    rlog
     pcre
     libxml2
 
