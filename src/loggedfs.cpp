@@ -68,10 +68,9 @@ INITIALIZE_EASYLOGGINGPP
 using namespace std;
 static Config config;
 static int savefd;
-static int fileLog = 0;
 static el::base::DispatchAction dispatchAction = el::base::DispatchAction::NormalLog;
-static char* loggerId = "default";
-static el::Logger* defaultLogger;
+static char *loggerId = "default";
+static el::Logger *defaultLogger;
 
 const int MaxFuseArgs = 32;
 struct LoggedFS_Args
@@ -813,12 +812,18 @@ static bool processArgs(int argc, char *argv[], LoggedFS_Args *out)
             defaultLogger->info("Configuration file : %v", optarg);
             break;
         case 'l':
-            fileLog = open(optarg, O_WRONLY | O_CREAT | O_APPEND);
+        {
             defaultLogger->info("LoggedFS log file : %v", optarg);
+            el::Configurations defaultConf;
+            defaultConf.setToDefault();
+            defaultConf.setGlobally(el::ConfigurationType::ToFile, std::string("true"));
+            defaultConf.setGlobally(el::ConfigurationType::ToStandardOutput, std::string("false"));
+            defaultConf.setGlobally(el::ConfigurationType::Filename, std::string(optarg));
+            el::Loggers::reconfigureLogger("default", defaultConf);
+            defaultLogger = el::Loggers::getLogger("default");
             break;
-
+        }
         default:
-
             break;
         }
     }
@@ -868,8 +873,12 @@ static bool processArgs(int argc, char *argv[], LoggedFS_Args *out)
 int main(int argc, char *argv[])
 {
 
+    el::Configurations defaultConf;
+    defaultConf.setToDefault();
+    defaultConf.setGlobally(el::ConfigurationType::ToFile, std::string("false"));
+    el::Loggers::reconfigureLogger("default", defaultConf);
     defaultLogger = el::Loggers::getLogger("default");
-    
+
     char *input = new char[2048]; // 2ko MAX input for configuration
 
     umask(0);
@@ -960,11 +969,7 @@ int main(int argc, char *argv[])
         fuse_main(loggedfsArgs->fuseArgc,
                   const_cast<char **>(loggedfsArgs->fuseArgv), &loggedFS_oper, NULL);
 #endif
-        if (fileLog != 0)
-        {
-            close(fileLog);
-        }
+
         defaultLogger->info("LoggedFS closing.");
-        delete defaultLogger;
     }
 }
