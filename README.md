@@ -1,4 +1,7 @@
 # LoggedFS - Filesystem monitoring with Fuse
+
+[![Build Status](https://travis-ci.org/rflament/loggedfs.svg?branch=feature%2Feasylogging%2B%2B)](https://travis-ci.org/rflament/loggedfs)
+
 ## Description
 
 LoggedFS is a fuse-based filesystem which can log every operations that happens in it. 
@@ -78,16 +81,25 @@ Just use that command :
 You should see logs like these :
 
     tail -f /var/log/syslog
-    17:29:34 (src/loggedfs.cpp:552) LoggedFS running as a public filesystem
-    17:29:34 (src/loggedfs.cpp:547) LoggedFS not running as a daemon
-    17:29:34 (src/loggedfs.cpp:666) LoggedFS starting at /var.
-    17:29:34 (src/loggedfs.cpp:691) chdir to /var
-    17:29:35 (src/loggedfs.cpp:136) getattr /var/ {SUCCESS} [ pid = 8700 kded [kdeinit] uid = 1000 ]
-    17:29:41 (src/loggedfs.cpp:136) getattr /var/ {SUCCESS} [ pid = 10923 ls uid = 1000 ]
-    17:29:41 (src/loggedfs.cpp:136) getattr /var/run {SUCCESS} [ pid = 10923 ls uid = 1000 ]
-    17:29:41 (src/loggedfs.cpp:136) getattr /var/run/nscd {FAILURE} [ pid = 10923 ls uid = 1000 ]
-    17:29:41 (src/loggedfs.cpp:136) readdir /var/ {SUCCESS} [ pid = 10923 ls uid = 1000 ]
-    17:29:41 (src/loggedfs.cpp:136) getattr /var/pouak {SUCCESS} [ pid = 10923 ls uid = 1000 ]
+    2018-03-21 15:32:14,095 INFO [default] LoggedFS not running as a daemon
+    2018-03-21 15:32:14,095 INFO [default] LoggedFS running as a public filesystem
+    2018-03-21 15:32:14,095 INFO [default] LoggedFS starting at /var.
+    2018-03-21 15:32:14,095 INFO [default] chdir to /var
+    2018-03-21 15:32:15,375 INFO [default] getattr /var/ {SUCCESS} [ pid = 934 /usr/sbin/VBoxService uid = 0 ]
+    2018-03-21 15:32:15,375 INFO [default] getattr /var/run {SUCCESS} [ pid = 934 /usr/sbin/VBoxService uid = 0 ]
+    2018-03-21 15:32:15,376 INFO [default] readlink /var/run {SUCCESS} [ pid = 934 /usr/sbin/VBoxService uid = 0 ]
+    2018-03-21 15:32:15,376 INFO [default] readlink /var/run {SUCCESS} [ pid = 934 /usr/sbin/VBoxService uid = 0 ]
+    2018-03-21 15:32:15,890 INFO [default] getattr /var/cache {SUCCESS} [ pid = 1539 update-notifier uid = 1000 ]
+    2018-03-21 15:32:15,891 INFO [default] getattr /var/cache/apt {SUCCESS} [ pid = 1539 update-notifier uid = 1000 ]
+    2018-03-21 15:32:15,891 INFO [default] getattr /var/cache/apt/archives {SUCCESS} [ pid = 1539 update-notifier uid = 1000 ]
+    2018-03-21 15:32:15,891 INFO [default] getattr /var/cache/apt/archives/partial {SUCCESS} [ pid = 1539 update-notifier uid = 1000 ]
+    2018-03-21 15:32:15,891 INFO [default] getattr /var/cache/apt/archives/partial {SUCCESS} [ pid = 1539 update-notifier uid = 1000 ]
+    2018-03-21 15:32:15,892 INFO [default] getattr /var/lib {SUCCESS} [ pid = 1539 update-notifier uid = 1000 ]
+    2018-03-21 15:32:15,892 INFO [default] getattr /var/lib/apt {SUCCESS} [ pid = 1539 update-notifier uid = 1000 ]
+    2018-03-21 15:32:15,892 INFO [default] getattr /var/lib/apt/lists {SUCCESS} [ pid = 1539 update-notifier uid = 1000 ]
+    2018-03-21 15:32:15,892 INFO [default] getattr /var/lib/apt/lists/partial {SUCCESS} [ pid = 1539 update-notifier uid = 1000 ]
+    2018-03-21 15:32:15,892 INFO [default] getattr /var/lib/apt/lists/partial {SUCCESS} [ pid = 1539 update-notifier uid = 1000 ]
+    2018-03-21 15:32:17,873 INFO [default] LoggedFS closing.
 
 If you have a configuration file to use you should use this command :
 
