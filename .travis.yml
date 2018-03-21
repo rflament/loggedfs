@@ -14,7 +14,7 @@ matrix:
             - attr
             - fuse
             - libfuse-dev
-            - libpcre-dev
+            - libpcre3-dev
             - libxml2-dev
 
 script:
