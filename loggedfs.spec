@@ -1,13 +1,13 @@
 Summary: Transparent fuse-filesystem which allows to log every operation that happens in the backend filesystem. 
 Name: loggedfs
-Version: 0.3
+Version: 0.9
 Release: 1.fc6
 Source: %{name}-%{version}.tar.bz2
-Packager: Remi Flament <rflament at laposte dot net>
-Vendor: Remi Flament <rflament at laposte dot net>
-License: GPL
+Packager: Remi Flament <remipouak at gmail dot com>
+Vendor: Remi Flament <remipouak at gmail dot com>
+License: Apache 2.0
 Group: Development/Tools
-Url: http://loggedfs.sourceforge.net/
+Url: https://github.com/rflament/loggedfs/
 Requires: fuse >= 2.6 fuse-libs >= 2.6 rlog >= 1.3 pcre >= 6.6 libxml2 >= 2.6
 
 

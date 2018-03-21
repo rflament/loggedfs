@@ -1,7 +1,7 @@
 /*****************************************************************************
  * Author:   Remi Flament <remipouak at gmail dot com>
  *****************************************************************************
- * Copyright (c) 2005 - 2016, Remi Flament
+ * Copyright (c) 2005 - 2018, Remi Flament
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
