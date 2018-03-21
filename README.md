@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/rflament/loggedfs.svg?branch=feature%2Feasylogging%2B%2B)](https://travis-ci.org/rflament/loggedfs)
 
+Donate Ethereum: 0x83FBC94FBca4e2f10Bede63e16C5b0Bb31a1Fed1
+
 ## Description
 
 LoggedFS is a fuse-based filesystem which can log every operations that happens in it. 
