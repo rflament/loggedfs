@@ -69,7 +69,8 @@ using namespace std;
 static Config config;
 static int savefd;
 static el::base::DispatchAction dispatchAction = el::base::DispatchAction::NormalLog;
-static char *loggerId = "default";
+static const char *loggerId = "default";
+static const char *additionalInfoFormat = " {%s} [ pid = %d %s uid = %d ]";
 static el::Logger *defaultLogger;
 
 const int MaxFuseArgs = 32;
@@ -105,12 +106,24 @@ static char *getAbsolutePath(const char *path)
 
 static char *getRelativePath(const char *path)
 {
-    char *rPath = new char[strlen(path) + 2];
+    if (path[0] == '/')
+    {
+        if (strlen(path) == 1)
+        {
+            char *rPath = new char[2];
 
-    strcpy(rPath, ".");
-    strcat(rPath, path);
+            strcpy(rPath, ".");
+            return rPath;
+        }
+        const char *substr = &path[1];
 
-    return rPath;
+        char *rPath = new char[strlen(path)];
+
+        strcpy(rPath, substr);
+        return (char *)rPath;
+    }
+
+    return strdup(path);
 }
 
 /*
@@ -146,30 +159,27 @@ static void loggedfs_log(const char *path, const char *action, const int returnc
     if (config.shouldLog(path, fuse_get_context()->uid, action, retname))
     {
         va_list args;
-        char buf[2048];
-        char additionalInfo[1024];
-
-        memset(buf, 0, 2048);
-        memset(additionalInfo, 0, 1024);
+        char *buf = NULL;
+        char *additionalInfo = NULL;
 
         char *caller_name = getcallername();
-        sprintf(additionalInfo, " {%s} [ pid = %d %s uid = %d ]", retname, fuse_get_context()->pid, config.isPrintProcessNameEnabled() ? caller_name : "", fuse_get_context()->uid);
+        asprintf(&additionalInfo, additionalInfoFormat, retname, fuse_get_context()->pid, config.isPrintProcessNameEnabled() ? caller_name : "", fuse_get_context()->uid);
 
         va_start(args, format);
-        vsprintf(buf, format, args);
+        vasprintf(&buf, format, args);
         va_end(args);
-
-        strcat(buf, additionalInfo);
 
         if (returncode >= 0)
         {
-            ELPP_WRITE_LOG(el::base::Writer, el::Level::Info, dispatchAction, "default") << buf;
+            ELPP_WRITE_LOG(el::base::Writer, el::Level::Info, dispatchAction, "default") << buf << additionalInfo;
         }
         else
         {
-            ELPP_WRITE_LOG(el::base::Writer, el::Level::Error, dispatchAction, "default") << buf;
+            ELPP_WRITE_LOG(el::base::Writer, el::Level::Error, dispatchAction, "default") << buf << additionalInfo;
         }
 
+        delete[] buf;
+        delete[] additionalInfo;
         delete[] caller_name;
     }
 }
@@ -537,17 +547,11 @@ static int loggedFS_utime(const char *path, struct utimbuf *buf)
 static int loggedFS_utimens(const char *path, const struct timespec ts[2])
 {
     int res;
-    struct timeval tv[2];
 
     char *aPath = getAbsolutePath(path);
     path = getRelativePath(path);
 
-    tv[0].tv_sec = ts[0].tv_sec;
-    tv[0].tv_usec = ts[0].tv_nsec / 1000;
-    tv[1].tv_sec = ts[1].tv_sec;
-    tv[1].tv_usec = ts[1].tv_nsec / 1000;
-
-    res = utimes(path, tv);
+    res = utimensat(0, path, ts, AT_SYMLINK_NOFOLLOW);
 
     loggedfs_log(aPath, "utimens", res, "utimens %s", aPath);
     delete[] aPath;
@@ -590,45 +594,28 @@ static int loggedFS_open(const char *path, struct fuse_file_info *fi)
     if (res == -1)
         return -errno;
 
-    close(res);
+    fi->fh = res;
     return 0;
 }
 
 static int loggedFS_read(const char *path, char *buf, size_t size, off_t offset,
                          struct fuse_file_info *fi)
 {
-    int fd;
+    char *aPath = getAbsolutePath(path);
     int res;
 
-    char *aPath = getAbsolutePath(path);
-    path = getRelativePath(path);
-    (void)fi;
-
-    fd = open(path, O_RDONLY);
-    if (fd == -1)
+    loggedfs_log(aPath, "read", 0, "read %d bytes from %s at offset %d", size, aPath, offset);
+    res = pread(fi->fh, buf, size, offset);
+    if (res == -1)
     {
         res = -errno;
         loggedfs_log(aPath, "read", -1, "read %d bytes from %s at offset %d", size, aPath, offset);
-        delete[] aPath;
-        delete[] path;
-        return res;
     }
     else
     {
-        loggedfs_log(aPath, "read", 0, "read %d bytes from %s at offset %d", size, aPath, offset);
-    }
-
-    res = pread(fd, buf, size, offset);
-
-    if (res == -1)
-        res = -errno;
-    else
         loggedfs_log(aPath, "read", 0, "%d bytes read from %s at offset %d", res, aPath, offset);
-
+    }
     delete[] aPath;
-    delete[] path;
-
-    close(fd);
     return res;
 }
 
@@ -686,23 +673,25 @@ static int loggedFS_statfs(const char *path, struct statvfs *stbuf)
 
 static int loggedFS_release(const char *path, struct fuse_file_info *fi)
 {
-    /* Just a stub.  This method is optional and can safely be left
-       unimplemented */
-
+    char *aPath = getAbsolutePath(path);
     (void)path;
-    (void)fi;
+
+    loggedfs_log(aPath, "release", 0, "release %s", aPath);
+    delete[] aPath;
+
+    close(fi->fh);
     return 0;
 }
 
 static int loggedFS_fsync(const char *path, int isdatasync,
                           struct fuse_file_info *fi)
 {
-    /* Just a stub.  This method is optional and can safely be left
-       unimplemented */
-
+    char *aPath = getAbsolutePath(path);
     (void)path;
     (void)isdatasync;
     (void)fi;
+    loggedfs_log(aPath, "fsync", 0, "fsync %s", aPath);
+    delete[] aPath;
     return 0;
 }
 
@@ -781,7 +770,7 @@ static bool processArgs(int argc, char *argv[], LoggedFS_Args *out)
     // logging the ~/.kde/share/config directory, in which hard links for lock
     // files are verified by their inode equivalency.
 
-#define COMMON_OPTS "nonempty,use_ino"
+#define COMMON_OPTS "nonempty,use_ino,attr_timeout=0,entry_timeout=0,negative_timeout=0"
 
     while ((res = getopt(argc, argv, "hpfec:l:")) != -1)
     {
