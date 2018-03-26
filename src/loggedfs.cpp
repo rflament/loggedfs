@@ -551,7 +551,7 @@ static int loggedFS_utimens(const char *path, const struct timespec ts[2])
     char *aPath = getAbsolutePath(path);
     path = getRelativePath(path);
 
-    res = utimensat(0, path, ts, AT_SYMLINK_NOFOLLOW);
+    res = utimensat(AT_FDCWD, path, ts, AT_SYMLINK_NOFOLLOW);
 
     loggedfs_log(aPath, "utimens", res, "utimens %s", aPath);
     delete[] aPath;
@@ -895,6 +895,7 @@ int main(int argc, char *argv[])
     loggedFS_oper.utime = loggedFS_utime;
 #else
     loggedFS_oper.utimens = loggedFS_utimens;
+    loggedFS_oper.flag_utime_omit_ok = 1;
 #endif
     loggedFS_oper.open = loggedFS_open;
     loggedFS_oper.read = loggedFS_read;
