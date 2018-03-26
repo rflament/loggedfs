@@ -131,7 +131,7 @@ for (cur_node = a_node; cur_node; cur_node = cur_node->next)
 				includes.push_back(*filter);
 				}
 			else excludes.push_back(*filter);
-			delete buffer;
+			delete[] buffer;
 			}		
     		}
 		
