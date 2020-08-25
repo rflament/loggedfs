@@ -34,7 +34,9 @@
 #include <fcntl.h>
 #include <dirent.h>
 #include <errno.h>
+#ifdef _linux
 #include <sys/statfs.h>
+#endif
 #ifdef HAVE_SETXATTR
 #include <sys/xattr.h>
 #endif
@@ -854,7 +856,6 @@ static bool processArgs(int argc, char *argv[], LoggedFS_Args *out)
 
 int main(int argc, char *argv[])
 {
-
     el::Configurations defaultConf;
     defaultConf.setToDefault();
     defaultConf.setGlobally(el::ConfigurationType::ToFile, std::string("false"));
