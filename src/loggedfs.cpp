@@ -765,7 +765,11 @@ static bool processArgs(int argc, char *argv[], LoggedFS_Args *out)
     // logging the ~/.kde/share/config directory, in which hard links for lock
     // files are verified by their inode equivalency.
 
+#ifdef _linux
 #define COMMON_OPTS "nonempty,use_ino,attr_timeout=0,entry_timeout=0,negative_timeout=0"
+#else
+#define COMMON_OPTS "use_ino,attr_timeout=0,entry_timeout=0,negative_timeout=0"
+#endif
 
     while ((res = getopt(argc, argv, "hpfec:l:")) != -1)
     {
