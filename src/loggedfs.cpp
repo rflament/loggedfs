@@ -656,6 +656,7 @@ static int loggedFS_statfs(const char *orig_path, struct statvfs *stbuf)
     int res;
     char *aPath = getAbsolutePath(orig_path);
     char *path = getRelativePath(orig_path);
+
     res = statvfs(path, stbuf);
     loggedfs_log(aPath, "statfs", res, "statfs %s", aPath);
     delete[] aPath;
@@ -770,7 +771,7 @@ static bool processArgs(int argc, char *argv[], LoggedFS_Args *out)
 #ifdef linux
 #define COMMON_OPTS "nonempty,use_ino,attr_timeout=0,entry_timeout=0,negative_timeout=0"
 #else
-#define COMMON_OPTS "use_ino,attr_timeout=0,entry_timeout=0,negative_timeout=0"
+#define COMMON_OPTS "debug,use_ino,attr_timeout=0,entry_timeout=0,negative_timeout=0"
 #endif
 
     while ((res = getopt(argc, argv, "hpfec:l:")) != -1)
@@ -915,7 +916,6 @@ int main(int argc, char *argv[])
 
     if (processArgs(argc, argv, loggedfsArgs))
     {
-
         if (loggedfsArgs->isDaemon)
         {
             dispatchAction = el::base::DispatchAction::SysLog;
@@ -961,5 +961,8 @@ int main(int argc, char *argv[])
 #endif
 
         defaultLogger->info("LoggedFS closing.");
+
+
+
     }
 }

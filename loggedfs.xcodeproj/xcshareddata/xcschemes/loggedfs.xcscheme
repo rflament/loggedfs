@@ -65,11 +65,19 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "/tmp/TEST_LOGGED_FS"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/tmp/TEST_LOGGED_FS_2"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/Volumes/UNTITLED"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "/Users/danilkorotenko/TEST_LOGGED_FS"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>
