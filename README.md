@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/rflament/loggedfs.svg?branch=feature%2Feasylogging%2B%2B)](https://travis-ci.org/rflament/loggedfs)
 
 Donate Ethereum: 0x83FBC94FBca4e2f10Bede63e16C5b0Bb31a1Fed1
+
 For OSX version: 0x3dF505eC53620Df8F0bc1895bcBF53a990BEc7Bb
 
 ## Description
