@@ -760,6 +760,8 @@ static bool processArgs(int argc, char *argv[], LoggedFS_Args *out)
     // We need the "nonempty" option to mount the directory in recent FUSE's
     // because it's non empty and contains the files that will be logged.
     //
+    // "nonempty" is linux-only option
+    //
     // We need "use_ino" so the files will use their original inode numbers,
     // instead of all getting 0xFFFFFFFF . For example, this is required for
     // logging the ~/.kde/share/config directory, in which hard links for lock
