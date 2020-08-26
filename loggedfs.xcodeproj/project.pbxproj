@@ -19,6 +19,7 @@
 		DA690C3324F5635E00BFE910 /* easylogging++.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "easylogging++.cc"; sourceTree = "<group>"; };
 		DA690C3624F564BB00BFE910 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		DA690C3824F5655A00BFE910 /* loggedfs.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = loggedfs.entitlements; sourceTree = "<group>"; };
+		DA690C3924F5704F00BFE910 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		DACAD52924F53AF700BDB0FF /* loggedfs */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = loggedfs; sourceTree = BUILT_PRODUCTS_DIR; };
 		DACAD53424F53B4600BDB0FF /* Config.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Config.cpp; sourceTree = "<group>"; };
 		DACAD53524F53B4600BDB0FF /* loggedfs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = loggedfs.cpp; sourceTree = "<group>"; };
@@ -59,6 +60,7 @@
 		DACAD52024F53AF700BDB0FF = {
 			isa = PBXGroup;
 			children = (
+				DA690C3924F5704F00BFE910 /* README.md */,
 				DA690C3824F5655A00BFE910 /* loggedfs.entitlements */,
 				DACAD53C24F53B4D00BDB0FF /* vendor */,
 				DACAD53324F53B2900BDB0FF /* src */,
