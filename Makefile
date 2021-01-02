@@ -14,7 +14,7 @@ loggedfs: $(builddir)/loggedfs.o $(builddir)/Config.o $(builddir)/Filter.o $(bui
 	$(CC) -o loggedfs $(builddir)/loggedfs.o $(builddir)/Config.o $(builddir)/Filter.o $(builddir)/easylogging.o $(LDFLAGS)
 
 $(builddir)/loggedfs.o: $(builddir)/Config.o $(builddir)/Filter.o $(srcdir)/loggedfs.cpp
-	$(CC) -o $(builddir)/loggedfs.o -c $(srcdir)/loggedfs.cpp $(CFLAGS) -Ivendor/github.com/muflihun/easyloggingpp/src
+	$(CC) -o $(builddir)/loggedfs.o -c $(srcdir)/loggedfs.cpp $(CFLAGS) -I$(easyloggingdir)
 
 $(builddir)/Config.o: $(builddir)/Filter.o $(srcdir)/Config.cpp $(srcdir)/Config.h
 	$(CC) -o $(builddir)/Config.o -c $(srcdir)/Config.cpp $(CFLAGS)
