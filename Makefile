@@ -29,10 +29,10 @@ clean:
 	rm -rf $(builddir)/
 
 install:
-	gzip --keep loggedfs.1
-	cp loggedfs.1.gz /usr/share/man/man1/
-	cp loggedfs /usr/bin/
-	cp loggedfs.xml /etc/
+	mkdir -p $(DESTDIR)/usr/share/man/man1 $(DESTDIR)/usr/bin $(DESTDIR)/etc
+	gzip < loggedfs.1 > $(DESTDIR)/usr/share/man/man1/loggedfs.1.gz
+	cp loggedfs $(DESTDIR)/usr/bin/
+	cp loggedfs.xml $(DESTDIR)/etc/
 
 
 mrproper: clean
