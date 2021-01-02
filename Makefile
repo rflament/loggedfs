@@ -1,6 +1,6 @@
-CXX=g++
-CXXFLAGS=-Wall -ansi -D_FILE_OFFSET_BITS=64 -DFUSE_USE_VERSION=26 -DELPP_SYSLOG -DELPP_NO_DEFAULT_LOG_FILE -DELPP_THREAD_SAFE -std=c++11 `xml2-config --cflags`
-LDFLAGS=-Wall -ansi -lpcre -lfuse `xml2-config --libs` -lpthread
+CXX?=g++
+CXXFLAGS+=-Wall -ansi -D_FILE_OFFSET_BITS=64 -DFUSE_USE_VERSION=26 -DELPP_SYSLOG -DELPP_NO_DEFAULT_LOG_FILE -DELPP_THREAD_SAFE -std=c++11 `xml2-config --cflags`
+LDFLAGS+=-Wall -ansi -lpcre -lfuse `xml2-config --libs` -lpthread
 srcdir=src
 easyloggingdir=vendor/github.com/muflihun/easyloggingpp/src
 builddir=build
@@ -11,19 +11,19 @@ $(builddir):
 	mkdir $(builddir)
 
 loggedfs: $(builddir)/loggedfs.o $(builddir)/Config.o $(builddir)/Filter.o $(builddir)/easylogging.o
-	$(CXX) -o loggedfs $(builddir)/loggedfs.o $(builddir)/Config.o $(builddir)/Filter.o $(builddir)/easylogging.o $(LDFLAGS)
+	$(CXX) $(CPPFLAGS) -o loggedfs $(builddir)/loggedfs.o $(builddir)/Config.o $(builddir)/Filter.o $(builddir)/easylogging.o $(LDFLAGS)
 
 $(builddir)/loggedfs.o: $(builddir)/Config.o $(builddir)/Filter.o $(srcdir)/loggedfs.cpp
-	$(CXX) -o $(builddir)/loggedfs.o -c $(srcdir)/loggedfs.cpp $(CXXFLAGS) -I$(easyloggingdir)
+	$(CXX) $(CPPFLAGS) -o $(builddir)/loggedfs.o -c $(srcdir)/loggedfs.cpp $(CXXFLAGS) -I$(easyloggingdir)
 
 $(builddir)/Config.o: $(builddir)/Filter.o $(srcdir)/Config.cpp $(srcdir)/Config.h
-	$(CXX) -o $(builddir)/Config.o -c $(srcdir)/Config.cpp $(CXXFLAGS)
+	$(CXX) $(CPPFLAGS) -o $(builddir)/Config.o -c $(srcdir)/Config.cpp $(CXXFLAGS)
 
 $(builddir)/Filter.o: $(srcdir)/Filter.cpp $(srcdir)/Filter.h
-	$(CXX) -o $(builddir)/Filter.o -c $(srcdir)/Filter.cpp $(CXXFLAGS)
+	$(CXX) $(CPPFLAGS) -o $(builddir)/Filter.o -c $(srcdir)/Filter.cpp $(CXXFLAGS)
 
 $(builddir)/easylogging.o: $(easyloggingdir)/easylogging++.cc $(easyloggingdir)/easylogging++.h
-	$(CXX) -o $(builddir)/easylogging.o -c $(easyloggingdir)/easylogging++.cc $(CXXFLAGS)
+	$(CXX) $(CPPFLAGS) -o $(builddir)/easylogging.o -c $(easyloggingdir)/easylogging++.cc $(CXXFLAGS)
 
 clean:
 	rm -rf $(builddir)/
