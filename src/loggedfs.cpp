@@ -771,7 +771,7 @@ static bool processArgs(int argc, char *argv[], LoggedFS_Args *out)
 #ifdef linux
 #define COMMON_OPTS "nonempty,use_ino,attr_timeout=0,entry_timeout=0,negative_timeout=0"
 #else
-#define COMMON_OPTS "debug,use_ino,attr_timeout=0,entry_timeout=0,negative_timeout=0"
+#define COMMON_OPTS "use_ino,attr_timeout=0,entry_timeout=0,negative_timeout=0"
 #endif
 
     while ((res = getopt(argc, argv, "hpfec:l:")) != -1)
