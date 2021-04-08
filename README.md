@@ -112,4 +112,23 @@ If you have a configuration file to use you should use this command :
 
 If you want to log what other users do on your filesystem, you should use the -p option to allow them to see your mounted files. For a complete documentation see the manual page
 
+## About OSX implementation
+
+The main implementation of loggedfs is working with the one path specified in arguments.
+It mounts the fuse volume to the path specified and intercepts operations by splitting pathes
+to realPath and absolutePath.
+
+On OSX, all volumes should be mounted to /Volumes directory.
+
+Only root can mount to the other directory. But if you mount fuse volume as root, the regular 
+user will not have access to it. So this way is not appropriate.
+
+That is why OSX version is needed to deal with two pathes: the one where is fuse volume 
+mounted (/Volumes/LoggedFS), and the one specified in program arguments.
+
+
+
+
 Rémi Flament - remipouak at gmail.com
+
+OSX imeplementation - Danil Korotenko

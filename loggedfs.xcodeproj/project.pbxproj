@@ -10,8 +10,8 @@
 		DA690C3424F5635E00BFE910 /* easylogging++.cc in Sources */ = {isa = PBXBuildFile; fileRef = DA690C3324F5635E00BFE910 /* easylogging++.cc */; };
 		DA690C3724F564BB00BFE910 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DA690C3624F564BB00BFE910 /* libxml2.tbd */; };
 		DACAD53924F53B4600BDB0FF /* Config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DACAD53424F53B4600BDB0FF /* Config.cpp */; };
-		DACAD53A24F53B4600BDB0FF /* loggedfs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DACAD53524F53B4600BDB0FF /* loggedfs.cpp */; };
 		DACAD53B24F53B4600BDB0FF /* Filter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DACAD53624F53B4600BDB0FF /* Filter.cpp */; };
+		DAF7D1F4261EED870035C543 /* loggedfs_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAF7D1F3261EED870035C543 /* loggedfs_osx.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +26,7 @@
 		DACAD53624F53B4600BDB0FF /* Filter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Filter.cpp; sourceTree = "<group>"; };
 		DACAD53724F53B4600BDB0FF /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
 		DACAD53824F53B4600BDB0FF /* Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Filter.h; sourceTree = "<group>"; };
+		DAF7D1F3261EED870035C543 /* loggedfs_osx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = loggedfs_osx.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +86,7 @@
 				DACAD53624F53B4600BDB0FF /* Filter.cpp */,
 				DACAD53824F53B4600BDB0FF /* Filter.h */,
 				DACAD53524F53B4600BDB0FF /* loggedfs.cpp */,
+				DAF7D1F3261EED870035C543 /* loggedfs_osx.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -177,7 +179,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DACAD53A24F53B4600BDB0FF /* loggedfs.cpp in Sources */,
+				DAF7D1F4261EED870035C543 /* loggedfs_osx.cpp in Sources */,
 				DACAD53B24F53B4600BDB0FF /* Filter.cpp in Sources */,
 				DACAD53924F53B4600BDB0FF /* Config.cpp in Sources */,
 				DA690C3424F5635E00BFE910 /* easylogging++.cc in Sources */,
