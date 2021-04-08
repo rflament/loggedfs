@@ -127,7 +127,7 @@ That is why OSX version is needed to deal with two pathes: the one where is fuse
 mounted (/Volumes/LoggedFS), and the one specified in program arguments.
 
 
-
+## Authors
 
 Rémi Flament - remipouak at gmail.com
 
