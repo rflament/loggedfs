@@ -115,7 +115,7 @@ If you want to log what other users do on your filesystem, you should use the -p
 ## About OSX implementation
 
 The main implementation of loggedfs is working with the one path specified in arguments.
-It mounts the fuse volume to the path specified and intercepts operations by splitting pathes
+It mounts the fuse volume to the path specified and intercepts operations by splitting paths
 to realPath and absolutePath.
 
 On OSX, all volumes should be mounted to /Volumes directory.
@@ -130,5 +130,4 @@ mounted (/Volumes/LoggedFS), and the one specified in program arguments.
 
 
 Rémi Flament - remipouak at gmail.com
-
 OSX imeplementation - Danil Korotenko
