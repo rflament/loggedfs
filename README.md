@@ -131,4 +131,4 @@ mounted (/Volumes/LoggedFS), and the one specified in program arguments.
 
 Rémi Flament - remipouak at gmail.com
 
-OSX imeplementation - Danil Korotenko
+OSX implementation - Danil Korotenko
