@@ -19,7 +19,7 @@ cat ~/log.txt
 
 # make sure the actions have not been logged in syslog
 COUNT=$(grep -c grep loggedfs /var/log/syslog)
-if [ $COUNT -ne "0" ]; then
+if [[ $COUNT -ne 0 ]]; then
   echo "nothing should have been logged in syslog"
   exit 1
 fi
