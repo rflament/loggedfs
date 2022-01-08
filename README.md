@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/rflament/loggedfs.svg?branch=feature%2Feasylogging%2B%2B)](https://travis-ci.org/rflament/loggedfs)
 
-Donate Ethereum: 0x83FBC94FBca4e2f10Bede63e16C5b0Bb31a1Fed1
+Donate Ethereum: 0xd13338639d2d3eCeBea0B53C8E4C9085aa21Ccb2
 
 ## Description
 
@@ -40,9 +40,9 @@ If you have a recent distribution it should be. Fuse can be downloaded here : ht
 Then you should download the loggedfs source code archive and install it with the make command :
 
     sudo apt-get install libfuse-dev libxml2-dev libpcre3-dev
-    wget https://github.com/rflament/loggedfs/archive/loggedfs-0.9.tar.gz
-    tar xfz loggedfs-0.9.tar.gz
-    cd loggedfs-loggedfs-0.9
+    wget https://github.com/rflament/loggedfs/archive/loggedfs-0.X.tar.gz
+    tar xfz loggedfs-0.X.tar.gz
+    cd loggedfs-loggedfs-0.X
     make
     make install
     

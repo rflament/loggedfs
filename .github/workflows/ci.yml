@@ -1,0 +1,11 @@
+on: push
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: sudo apt-get install --assume-yes libpcre3-dev libfuse-dev fuse libxml2-dev attr
+      - run: make
+      - run: ./test.sh
+
