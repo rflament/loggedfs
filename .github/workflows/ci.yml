@@ -1,0 +1,7 @@
+on: push
+
+jobs:
+  build:
+    container: alpine:latest
+    steps:
+      - run: make
