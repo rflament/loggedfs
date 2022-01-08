@@ -1,7 +1,7 @@
 /*****************************************************************************
  * Author:   Remi Flament <remipouak at gmail dot com>
  *****************************************************************************
- * Copyright (c) 2005 - 2018, Remi Flament
+ * Copyright (c) 2005 - 2022, Remi Flament and contributors
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -78,7 +78,8 @@ struct LoggedFS_Args
 {
     char *mountPoint; // where the users read files
     char *configFilename;
-    bool isDaemon; // true == spawn in background, log to syslog
+    bool isDaemon; // true == spawn in background, log to syslog except if log file parameter is set
+    bool logToSyslog;
     const char *fuseArgv[MaxFuseArgs];
     int fuseArgc;
 };
@@ -737,6 +738,7 @@ static bool processArgs(int argc, char *argv[], LoggedFS_Args *out)
 {
     // set defaults
     out->isDaemon = true;
+    out->logToSyslog = true;
 
     out->fuseArgc = 0;
     out->configFilename = NULL;
@@ -774,6 +776,7 @@ static bool processArgs(int argc, char *argv[], LoggedFS_Args *out)
             return false;
         case 'f':
             out->isDaemon = false;
+            out->logToSyslog = false;
             // this option was added in fuse 2.x
             PUSHARG("-f");
             defaultLogger->info("LoggedFS not running as a daemon");
@@ -795,7 +798,8 @@ static bool processArgs(int argc, char *argv[], LoggedFS_Args *out)
             break;
         case 'l':
         {
-            defaultLogger->info("LoggedFS log file : %v", optarg);
+            defaultLogger->info("LoggedFS log file : %v, no syslog logs", optarg);
+            out->logToSyslog = false;
             el::Configurations defaultConf;
             defaultConf.setToDefault();
             defaultConf.setGlobally(el::ConfigurationType::ToFile, std::string("true"));
@@ -909,7 +913,7 @@ int main(int argc, char *argv[])
     if (processArgs(argc, argv, loggedfsArgs))
     {
 
-        if (loggedfsArgs->isDaemon)
+        if (loggedfsArgs->logToSyslog)
         {
             dispatchAction = el::base::DispatchAction::SysLog;
             loggerId = "syslog";
