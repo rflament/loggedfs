@@ -18,10 +18,10 @@ sudo umount $TEST_DIR
 cat ~/log.txt
 
 # make sure the actions have not been logged in syslog
-grep -c loggedfs /var/log/syslog
 COUNT=$(grep -c loggedfs /var/log/syslog)
 echo $COUNT
 if [ "$COUNT" -ne "0" ]; then
   echo "nothing should have been logged in syslog"
+  grep loggedfs /var/log/syslog
   exit 1
 fi
