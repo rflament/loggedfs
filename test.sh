@@ -1,3 +1,5 @@
+#!/bin/bash
+
 TEST_DIR=/tmp/test-loggedfs
 mkdir $TEST_DIR
 
@@ -9,7 +11,7 @@ mkdir $TEST_DIR
 ./loggedfs -l ~/log.txt $TEST_DIR
 
 # create file
-cat "bar" >> $TEST_DIR/foo && ls $TEST_DIR
+echo "bar" >> $TEST_DIR/foo && ls $TEST_DIR
 sudo umount $TEST_DIR
 
 # make sure the actions have been logged in the log file
