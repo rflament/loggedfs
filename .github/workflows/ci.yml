@@ -9,6 +9,6 @@ jobs:
       - run: make
       - run: mkdir /tmp/test
       - run: ./loggedfs -l ~/log.txt /tmp/test 
-      - run: ls /tmp/test
+      - run: touch /tmp/test/foo && ls /tmp/test
       - run: sudo umount /tmp/test
       - run: cat ~/log.txt
