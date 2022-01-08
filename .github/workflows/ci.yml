@@ -1,10 +1,14 @@
 on: push
 
 jobs:
-  build:
+  build-linux:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - run: sudo apt-get install --assume-yes libpcre3-dev libfuse-dev fuse libxml2-dev attr
       - run: make
-      - run: ./loggedfs
+      - run: mkdir /tmp/test
+      - run: ./loggedfs -l ~/log.txt /tmp/test 
+      - run: ls /tmp/test
+      - run: sudo umount /tmp/test
+      - run: cat ~/log.txt
