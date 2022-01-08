@@ -12,3 +12,4 @@ jobs:
       - run: touch /tmp/test/foo && ls /tmp/test
       - run: sudo umount /tmp/test
       - run: cat ~/log.txt
+      - run: cat /var/log/syslog
