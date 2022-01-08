@@ -7,9 +7,5 @@ jobs:
       - uses: actions/checkout@v1
       - run: sudo apt-get install --assume-yes libpcre3-dev libfuse-dev fuse libxml2-dev attr
       - run: make
-      - run: mkdir /tmp/test
-      - run: ./loggedfs -l ~/log.txt /tmp/test 
-      - run: touch /tmp/test/foo && ls /tmp/test
-      - run: sudo umount /tmp/test
-      - run: cat ~/log.txt
-      - run: cat /var/log/syslog
+      - run: ./test.sh
+
