@@ -6,38 +6,38 @@ Donate Ethereum: 0xd13338639d2d3eCeBea0B53C8E4C9085aa21Ccb2
 
 ## Description
 
-LoggedFS is a fuse-based filesystem which can log every operations that happens in it. 
+LoggedFS is a [FUSE](https://en.wikipedia.org/wiki/Filesystem_in_Userspace)-based filesystem which can log every operations that happens in it.
 
-How does it work ?
+### How does it work ?
 
-Fuse does almost everything. LoggedFS only sends a message to syslog when called by fuse and then let the real filesystem do the rest of the job.
+FUSE does almost everything. LoggedFS only sends a message to syslog when called by FUSE and then let the real filesystem do the rest of the job.
 
 ## Installation
 
-If loggedfs 0.9 is included in your distribution you can just install with your package manager :
+If LoggedFS 0.9 is included in your distribution you can just install with your package manager:
 
-    sudo apt-get install loggedfs   
+    sudo apt-get install loggedfs
 
 ## Simplest usage
 
-To record access to /tmp/TEST into ~/log.txt, just do:
+To record access to `/tmp/TEST` into `~/log.txt`, just do:
 
-    loggedfs -l ~/log.txt /tmp/TEST 
+    loggedfs -l ~/log.txt /tmp/TEST
 
-To stop recording, just unmount as usual:
+To stop recording, just `unmount` as usual:
 
     sudo umount /tmp/TEST
-    
-~/log.txt will need to be changed to readable by setting permissions:
-    
+
+The `~/log.txt` file will need to be changed to readable by setting permissions:
+
     chmod 0666 ~/log.txt
-    
+
 ## Installation from source
 
-First you have to make sure that fuse is installed on your computer. 
-If you have a recent distribution it should be. Fuse can be downloaded here : https://github.com/libfuse/libfuse.
+First you have to make sure that FUSE is installed on your computer.
+If you have a recent distribution it should be. FUSE can be downloaded here: [github.com/libfuse/libfuse](https://github.com/libfuse/libfuse).
 
-Then you should download the loggedfs source code archive and install it with the make command :
+Then you should download the LoggedFS source code archive and install it with the `make` command:
 
     sudo apt-get install libfuse-dev libxml2-dev libpcre3-dev
     wget https://github.com/rflament/loggedfs/archive/loggedfs-0.X.tar.gz
@@ -45,8 +45,8 @@ Then you should download the loggedfs source code archive and install it with th
     cd loggedfs-loggedfs-0.X
     make
     make install
-    
-LoggedFS has the following dependencies :
+
+LoggedFS has the following dependencies:
 
     fuse
     pcre
@@ -59,7 +59,7 @@ LoggedFS can use an XML configuration file if you want it to log operations only
 Here is a sample configuration file :
 
     <?xml version="1.0" encoding="UTF-8"?>
-    
+
     <loggedFS logEnabled="true" printProcessName="true">
       <includes>
         <include extension=".*" uid="*" action=".*" retname=".*"/>
@@ -71,13 +71,13 @@ Here is a sample configuration file :
       </excludes>
     </loggedFS>
 
-This configuration can be used to log everything except it if concerns a *.bak file, or if the uid is 1000, or if the operation is getattr.
+This configuration can be used to log everything except it if concerns a `*.bak` file, or if the uid is 1000, or if the operation is `getattr`.
 
 ## Launching LoggedFS
 
 If you just want to test LoggedFS you don't need any configuration file.
- 
-Just use that command :
+
+Just use that command:
 
     loggedfs -f -p /var
 
@@ -104,10 +104,10 @@ You should see logs like these :
     2018-03-21 15:32:15,892 INFO [default] getattr /var/lib/apt/lists/partial {SUCCESS} [ pid = 1539 update-notifier uid = 1000 ]
     2018-03-21 15:32:17,873 INFO [default] LoggedFS closing.
 
-If you have a configuration file to use you should use this command :
+If you have a configuration file to use you should use this command:
 
     ./loggedfs -c loggedfs.xml -p /var
 
-If you want to log what other users do on your filesystem, you should use the -p option to allow them to see your mounted files. For a complete documentation see the manual page
+If you want to log what other users do on your filesystem, you should use the `-p` option to allow them to see your mounted files. For a complete documentation see the manual page.
 
 Rémi Flament - remipouak at gmail.com
