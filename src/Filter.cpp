@@ -22,7 +22,8 @@
  *
  */
 #include "Filter.h"
-#include <pcre.h>
+#define PCRE2_CODE_UNIT_WIDTH 8
+#include <pcre2.h>
 
 #define OVECCOUNT 30
 
@@ -37,14 +38,15 @@ Filter::~Filter()
 
 bool Filter::matches( const char* str,const char* pattern)
 {
-    pcre *re;
-    const char *error;
-    int ovector[OVECCOUNT];
-    int erroffset;
+    pcre2_code *re;
+    int error;
+    pcre2_match_data *match_data;
+    PCRE2_SIZE erroffset;
 
 
-    re = pcre_compile(
-             pattern,
+    re = pcre2_compile(
+             (PCRE2_SPTR)pattern,
+             PCRE2_ZERO_TERMINATED,
              0,
              &error,
              &erroffset,
@@ -53,21 +55,22 @@ bool Filter::matches( const char* str,const char* pattern)
 
     if (re == NULL)
     {
-        printf("PCRE compilation failed at offset %d: %s\n", erroffset, error);
+        printf("PCRE compilation failed at offset %zu: %d\n", erroffset, error);
         return false;
     }
 
-    int rc = pcre_exec(
+    match_data = pcre2_match_data_create_from_pattern(re, NULL);
+
+    int rc = pcre2_match(
                  re,                   /* the compiled pattern */
-                 NULL,                 /* no extra data - we didn't study the pattern */
-                 str,              /* the subject string */
+                 (PCRE2_SPTR)str,              /* the subject string */
                  strlen(str),       /* the length of the subject */
                  0,                    /* start at offset 0 in the subject */
                  0,                    /* default options */
-                 ovector,              /* output vector for substring information */
-                 OVECCOUNT);           /* number of elements in the output vector */
+                 match_data,
+                 NULL);
 
-    pcre_free(re);
+    pcre2_code_free(re);
     return (rc >= 0);
 }
 

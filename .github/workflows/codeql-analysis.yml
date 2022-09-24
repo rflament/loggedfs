@@ -37,7 +37,7 @@ jobs:
         # Learn more about CodeQL language support at https://git.io/codeql-language-support
 
     steps:
-    - run: sudo apt-get install --assume-yes libpcre3-dev libfuse-dev fuse libxml2-dev attr
+    - run: sudo apt-get install --assume-yes libpcre2-dev libfuse-dev fuse libxml2-dev attr
     - name: Checkout repository
       uses: actions/checkout@v2
 

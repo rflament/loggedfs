@@ -39,7 +39,7 @@ If you have a recent distribution it should be. FUSE can be downloaded here: [gi
 
 Then you should download the LoggedFS source code archive and install it with the `make` command:
 
-    sudo apt-get install libfuse-dev libxml2-dev libpcre3-dev
+    sudo apt-get install libfuse-dev libxml2-dev libpcre2-dev
     wget https://github.com/rflament/loggedfs/archive/loggedfs-0.X.tar.gz
     tar xfz loggedfs-0.X.tar.gz
     cd loggedfs-loggedfs-0.X
@@ -49,7 +49,7 @@ Then you should download the LoggedFS source code archive and install it with th
 LoggedFS has the following dependencies:
 
     fuse
-    pcre
+    pcre2
     libxml2
 
 ## Configuration
