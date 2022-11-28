@@ -484,7 +484,7 @@ static int loggedFS_chown(const char *orig_path, uid_t uid, gid_t gid)
     int res;
     char *aPath = getAbsolutePath(orig_path);
     char *path = getRelativePath(orig_path);
-    res = lchown(path, uid, gid);
+    res = lchown(path, uid, gid) == -1 ? -errno : 0;
 
     char *username = getusername(uid);
     char *groupname = getgroupname(gid);
@@ -496,10 +496,7 @@ static int loggedFS_chown(const char *orig_path, uid_t uid, gid_t gid)
     delete[] aPath;
     free(path);
 
-    if (res == -1)
-        return -errno;
-
-    return 0;
+    return res;
 }
 
 static int loggedFS_truncate(const char *orig_path, off_t size)
