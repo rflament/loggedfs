@@ -1,6 +1,6 @@
 CXX?=g++
 CXXFLAGS+=-Wall -ansi -D_FILE_OFFSET_BITS=64 -DFUSE_USE_VERSION=26 -DELPP_SYSLOG -DELPP_NO_DEFAULT_LOG_FILE -DELPP_THREAD_SAFE -std=c++11 `xml2-config --cflags`
-LDFLAGS+=-Wall -ansi -lpcre -lfuse `xml2-config --libs` -lpthread
+LDFLAGS+=-Wall -ansi -lpcre2-8 -lfuse `xml2-config --libs` -lpthread
 srcdir=src
 easyloggingdir=vendor/github.com/muflihun/easyloggingpp/src
 builddir=build
