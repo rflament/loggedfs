@@ -761,8 +761,14 @@ static bool processArgs(int argc, char *argv[], LoggedFS_Args *out)
     // instead of all getting 0xFFFFFFFF . For example, this is required for
     // logging the ~/.kde/share/config directory, in which hard links for lock
     // files are verified by their inode equivalency.
+    //
+    // We need "atomic_o_trunc" option. if not, then FUSE will call truncate()
+    // function before calling open(). if the option was set, the O_TRUNC flag
+    // is passed to open() function. Without this flag, this will cause opening
+    // files in gvfs to fail.
+    // https://gitlab.gnome.org/GNOME/gvfs/-/blob/master/client/gvfsfusedaemon.c#L1045
 
-#define COMMON_OPTS "nonempty,use_ino,attr_timeout=0,entry_timeout=0,negative_timeout=0"
+#define COMMON_OPTS "nonempty,use_ino,attr_timeout=0,entry_timeout=0,negative_timeout=0,atomic_o_trunc"
 
     while ((res = getopt(argc, argv, "hpfec:l:")) != -1)
     {
